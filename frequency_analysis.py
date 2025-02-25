@@ -1,47 +1,30 @@
 import pandas as pd
-
-import os
 import subprocess
-
-# Виконати setup.sh перед завантаженням spaCy моделей
-if not os.path.exists("en_core_web_sm"):
-    subprocess.run(["bash", "setup.sh"], check=True)
-
 import spacy
 from collections import Counter
 # from itertools import islice
 import string
 import emoji
 
+# Список моделей, які потрібно завантажити
+models = [
+    "en_core_web_sm", "uk_core_news_sm", "fr_core_news_sm", "de_core_news_sm",
+    "it_core_news_sm", "ja_core_news_sm", "ko_core_news_sm", "pl_core_news_sm",
+    "pt_core_news_sm", "ru_core_news_sm", "es_core_news_sm", "sv_core_news_sm",
+    "ro_core_news_sm", "nl_core_news_sm", "hr_core_news_sm", "el_core_news_sm",
+    "sl_core_news_sm", "nb_core_news_sm", "mk_core_news_sm", "lt_core_news_sm",
+    "fi_core_news_sm", "da_core_news_sm", "ca_core_news_sm"
+]
 
-# Завантаження моделей у словник
-nlp_models = {
-    "en": spacy.load("en_core_web_sm"),
-    "uk": spacy.load("uk_core_news_sm"),
-    # "zh": spacy.load("zh_core_web_sm"),
-    "fr": spacy.load("fr_core_news_sm"),
-    "de": spacy.load("de_core_news_sm"),
-    "it": spacy.load("it_core_news_sm"),
-    "ja": spacy.load("ja_core_news_sm"),
-    "ko": spacy.load("ko_core_news_sm"),
-    "pl": spacy.load("pl_core_news_sm"),
-    "pt": spacy.load("pt_core_news_sm"),
-    "ru": spacy.load("ru_core_news_sm"),
-    "es": spacy.load("es_core_news_sm"),
-    "sv": spacy.load("sv_core_news_sm"),
-    "ro": spacy.load("ro_core_news_sm"),
-    "nl": spacy.load("nl_core_news_sm"),
-    "hr": spacy.load("hr_core_news_sm"),
-    "el": spacy.load("el_core_news_sm"),
-    "sl": spacy.load("sl_core_news_sm"),
-    "nb": spacy.load("nb_core_news_sm"),
-    "mk": spacy.load("mk_core_news_sm"),
-    "lt": spacy.load("lt_core_news_sm"),
-    "fi": spacy.load("fi_core_news_sm"),
-    "da": spacy.load("da_core_news_sm"),
-    "ca": spacy.load("ca_core_news_sm"),
-}
+# Завантажуємо моделі, якщо вони відсутні
+for model in models:
+    try:
+        spacy.load(model)
+    except OSError:
+        subprocess.run(["python", "-m", "spacy", "download", model], check=True)
 
+# Тепер можна використовувати моделі
+nlp_models = {lang: spacy.load(lang) for lang in models}
 
 def create_df_for_fa(df):
     # Функція лематизації з підтримкою багатьох мов
