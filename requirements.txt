@@ -50,7 +50,7 @@ de_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/de
 debugpy==1.8.9
 decorator==5.0.9
 defusedxml==0.7.1
-dill==0.3.8
+dill
 distlib==0.3.6
 distro==1.9.0
 Django==4.1
