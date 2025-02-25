@@ -1,5 +1,5 @@
 import pandas as pd
-import subprocess
+import os
 import spacy
 from collections import Counter
 # from itertools import islice
@@ -16,12 +16,11 @@ models = [
     "fi_core_news_sm", "da_core_news_sm", "ca_core_news_sm"
 ]
 
-# Завантажуємо моделі, якщо вони відсутні
+# Перевірка та завантаження моделей
 for model in models:
-    try:
-        spacy.load(model)
-    except OSError:
-        subprocess.run(["python", "-m", "spacy", "download", model], check=True)
+    model_path = os.path.join(spacy.util.get_data_path(), model)
+    if not os.path.exists(model_path):
+        os.system(f"python3 -m spacy download {model}")
 
 # Тепер можна використовувати моделі
 nlp_models = {lang: spacy.load(lang) for lang in models}
