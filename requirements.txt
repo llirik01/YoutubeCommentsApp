@@ -50,7 +50,7 @@ de_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/de
 debugpy==1.8.9
 decorator==5.0.9
 defusedxml==0.7.1
-dill
+dill==0.3.5.1
 distlib==0.3.6
 distro==1.9.0
 Django==4.1
@@ -149,7 +149,7 @@ ml-dtypes==0.3.2
 mlxtend==0.19.0
 mpmath==1.2.1
 multidict==6.1.0
-multiprocess==0.70.16
+multiprocess==0.70.13
 murmurhash==1.0.12
 namex==0.0.8
 nb_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-3.8.0/nb_core_news_sm-3.8.0-py3-none-any.whl#sha256=086f2cfcc1568b2ee49a2ab297f7910f2645ae6892f2d5d15d8b077f5d0bd773
