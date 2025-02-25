@@ -1,4 +1,12 @@
 import pandas as pd
+
+import os
+import subprocess
+
+# Виконати setup.sh перед завантаженням spaCy моделей
+if not os.path.exists("en_core_web_sm"):
+    subprocess.run(["bash", "setup.sh"], check=True)
+
 import spacy
 from collections import Counter
 # from itertools import islice
@@ -116,39 +124,6 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import plotly.express as px
 
-
-# def generate_wordcloud(df, nlp_models=nlp_models):
-#     """
-#     Функція для створення хмари слів на основі лематизованих коментарів.
-#
-#     :param df: DataFrame з колонками "comment_lemmatized" і "language"
-#     :param nlp_models: Словник NLP-моделей для різних мов
-#     """
-#     def extract_keywords(text, lang):
-#         if not isinstance(text, str) or text.strip() == "":
-#             return ""
-#
-#         nlp = nlp_models.get(lang)  # Отримуємо відповідну NLP-модель
-#         if not nlp:
-#             return ""  # Якщо мова не підтримується, повертаємо пустий рядок
-#
-#         doc = nlp(text)
-#         return " ".join([token.lemma_ for token in doc if token.pos_ in {"NOUN", "VERB", "ADJ"}])
-#
-#     # Додаємо колонку "keywords" з обробленими словами
-#     df["keywords"] = df.apply(lambda row: extract_keywords(row["comment_lemmatized"], row["language"]), axis=1)
-#
-#     # Об'єднуємо всі ключові слова в один текст
-#     text = " ".join(df["keywords"].dropna())
-#
-#     # Генеруємо хмару слів
-#     wordcloud = WordCloud(width=1200, height=600, background_color="white", colormap="viridis").generate(text)
-#
-#     # Відображаємо хмару слів
-#     plt.figure(figsize=(10, 5))
-#     plt.imshow(wordcloud, interpolation="bilinear")
-#     plt.axis("off")
-#     plt.show()
 
 def generate_wordcloud(df, nlp_models=nlp_models):
     """
