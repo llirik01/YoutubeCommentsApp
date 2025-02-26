@@ -10,4 +10,5 @@ matplotlib==3.9.4
 wordcloud==1.9.4
 langdetect==1.0.9
 spacy==3.8.3
-
+pymorphy3==2.0.2
+pymorphy3-dicts-uk==2.4.1.1.1663094765
