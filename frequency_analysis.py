@@ -6,44 +6,33 @@ from collections import Counter
 import string
 import emoji
 
-# Мапінг назв моделей spaCy для завантаження
-models = {
-    "en": "en_core_web_sm",
-    "uk": "uk_core_news_sm",
-    "fr": "fr_core_news_sm",
-    "de": "de_core_news_sm",
-    "it": "it_core_news_sm",
-    "ja": "ja_core_news_sm",
-    "ko": "ko_core_news_sm",
-    "pl": "pl_core_news_sm",
-    "pt": "pt_core_news_sm",
-    "ru": "ru_core_news_sm",
-    "es": "es_core_news_sm",
-    "sv": "sv_core_news_sm",
-    "ro": "ro_core_news_sm",
-    "nl": "nl_core_news_sm",
-    "hr": "hr_core_news_sm",
-    "el": "el_core_news_sm",
-    "sl": "sl_core_news_sm",
-    "nb": "nb_core_news_sm",
-    "mk": "mk_core_news_sm",
-    "lt": "lt_core_news_sm",
-    "fi": "fi_core_news_sm",
-    "da": "da_core_news_sm",
-    "ca": "ca_core_news_sm",
+# Завантаження моделей у словник
+nlp_models = {
+    "en": spacy.load("en_core_web_sm"),
+    "uk": spacy.load("uk_core_news_sm"),
+    "zh": spacy.load("zh_core_web_sm"),
+    "fr": spacy.load("fr_core_news_sm"),
+    "de": spacy.load("de_core_news_sm"),
+    "it": spacy.load("it_core_news_sm"),
+    "ja": spacy.load("ja_core_news_sm"),
+    "ko": spacy.load("ko_core_news_sm"),
+    "pl": spacy.load("pl_core_news_sm"),
+    "pt": spacy.load("pt_core_news_sm"),
+    "ru": spacy.load("ru_core_news_sm"),
+    "es": spacy.load("es_core_news_sm"),
+    "sv": spacy.load("sv_core_news_sm"),
+    "ro": spacy.load("ro_core_news_sm"),
+    "nl": spacy.load("nl_core_news_sm"),
+    "hr": spacy.load("hr_core_news_sm"),
+    "el": spacy.load("el_core_news_sm"),
+    "sl": spacy.load("sl_core_news_sm"),
+    "nb": spacy.load("nb_core_news_sm"),
+    "mk": spacy.load("mk_core_news_sm"),
+    "lt": spacy.load("lt_core_news_sm"),
+    "fi": spacy.load("fi_core_news_sm"),
+    "da": spacy.load("da_core_news_sm"),
+    "ca": spacy.load("ca_core_news_sm"),
 }
-
-# Завантажуємо моделі перед використанням
-for lang, model in models.items():
-    try:
-        spacy.load(model)
-    except OSError:
-        print(f"Модель {model} не знайдена. Завантажуємо...")
-        subprocess.run(["python", "-m", "spacy", "download", model], check=True)
-        print(f"Модель {model} успішно встановлена!")
-
-# Створюємо NLP-моделі
-nlp_models = {lang: spacy.load(model) for lang, model in models.items()}
 
 def create_df_for_fa(df):
     # Функція лематизації з підтримкою багатьох мов

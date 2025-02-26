@@ -109,9 +109,6 @@ def perform_anova_test(df):
     # Виконання ANOVA-тесту
     stat, p_value = f_oneway(neg, neu, pos)
 
-    # Виведення результатів
-    # print(f"ANOVA: статистика={stat:.4f}, p-значення={p_value:.4f}")
-
     if p_value < 0.05:
         conclusion = "ANOVA is a statistical test that helps determine whether comment length varies depending \
         on sentiment. The results showed that there is a correlation between text length and its emotional tone."
@@ -136,10 +133,6 @@ def plot_sentiment_analysis(sentiments):
     """
     if not isinstance(sentiments, pd.Series):
         raise TypeError("Очікується pandas Series з настроями.")
-
-    # Визначення кольорів для кожної категорії
-    # color_map = {'negative': 'red', 'neutral': 'grey', 'positive': 'green'}
-    # colors = [color_map.get(sentiment, 'gray') for sentiment in sentiments.index]
 
      # Визначення кольорів з прозорістю (0.6 - напівпрозорість)
     color_map = {
