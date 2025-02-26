@@ -18,9 +18,7 @@ models = [
 
 # Перевірка та завантаження моделей
 for model in models:
-    model_path = os.path.join(spacy.info_path, model)
-    if not os.path.exists(model_path):
-        os.system(f"python3 -m spacy download {model}")
+    os.system(f"python3 -m spacy download {model}")
 
 # Тепер можна використовувати моделі
 nlp_models = {lang: spacy.load(lang) for lang in models}
