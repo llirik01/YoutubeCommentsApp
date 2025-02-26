@@ -6,15 +6,32 @@ from collections import Counter
 import string
 import emoji
 
-# Список моделей, які потрібно завантажити
-models = [
-    "en_core_web_sm", "uk_core_news_sm", "fr_core_news_sm", "de_core_news_sm",
-    "it_core_news_sm", "ja_core_news_sm", "ko_core_news_sm", "pl_core_news_sm",
-    "pt_core_news_sm", "ru_core_news_sm", "es_core_news_sm", "sv_core_news_sm",
-    "ro_core_news_sm", "nl_core_news_sm", "hr_core_news_sm", "el_core_news_sm",
-    "sl_core_news_sm", "nb_core_news_sm", "mk_core_news_sm", "lt_core_news_sm",
-    "fi_core_news_sm", "da_core_news_sm", "ca_core_news_sm"
-]
+# Мапінг назв моделей spaCy для завантаження
+models = {
+    "en": "en_core_web_sm",
+    "uk": "uk_core_news_sm",
+    "fr": "fr_core_news_sm",
+    "de": "de_core_news_sm",
+    "it": "it_core_news_sm",
+    "ja": "ja_core_news_sm",
+    "ko": "ko_core_news_sm",
+    "pl": "pl_core_news_sm",
+    "pt": "pt_core_news_sm",
+    "ru": "ru_core_news_sm",
+    "es": "es_core_news_sm",
+    "sv": "sv_core_news_sm",
+    "ro": "ro_core_news_sm",
+    "nl": "nl_core_news_sm",
+    "hr": "hr_core_news_sm",
+    "el": "el_core_news_sm",
+    "sl": "sl_core_news_sm",
+    "nb": "nb_core_news_sm",
+    "mk": "mk_core_news_sm",
+    "lt": "lt_core_news_sm",
+    "fi": "fi_core_news_sm",
+    "da": "da_core_news_sm",
+    "ca": "ca_core_news_sm",
+}
 
 # Завантажуємо моделі перед використанням
 for lang, model in models.items():
@@ -25,8 +42,8 @@ for lang, model in models.items():
         subprocess.run(["python", "-m", "spacy", "download", model], check=True)
         print(f"Модель {model} успішно встановлена!")
 
-# Тепер можна використовувати моделі
-nlp_models = {lang: spacy.load(lang) for lang in models}
+# Створюємо NLP-моделі
+nlp_models = {lang: spacy.load(model) for lang, model in models.items()}
 
 def create_df_for_fa(df):
     # Функція лематизації з підтримкою багатьох мов
