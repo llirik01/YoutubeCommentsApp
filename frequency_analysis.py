@@ -18,7 +18,7 @@ models = [
 
 # Перевірка та завантаження моделей
 for model in models:
-    model_path = os.path.join(spacy.util.get_data_path(), model)
+    model_path = os.path.join(spacy.info_path, model)
     if not os.path.exists(model_path):
         os.system(f"python3 -m spacy download {model}")
 
