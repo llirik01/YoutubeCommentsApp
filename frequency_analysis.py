@@ -16,12 +16,14 @@ models = [
     "fi_core_news_sm", "da_core_news_sm", "ca_core_news_sm"
 ]
 
-for model in models:
+# Завантажуємо моделі перед використанням
+for lang, model in models.items():
     try:
         spacy.load(model)
     except OSError:
-        subprocess.run(["pip", "install", f"https://github.com/explosion/spacy-models/releases/download/{model}-3.8.0/{model}-3.8.0-py3-none-any.whl"], check=True)
-        spacy.load(model)  # Перевіряємо, що модель тепер доступна
+        print(f"Модель {model} не знайдена. Завантажуємо...")
+        subprocess.run(["python", "-m", "spacy", "download", model], check=True)
+        print(f"Модель {model} успішно встановлена!")
 
 # Тепер можна використовувати моделі
 nlp_models = {lang: spacy.load(lang) for lang in models}
