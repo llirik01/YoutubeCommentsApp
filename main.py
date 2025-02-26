@@ -139,7 +139,7 @@ if st.session_state["page"] == "home":
                          Macedonian (mk), Lithuanian (lt), Finnish (fi), Danish (da), Catalan (ca).",
                 unsafe_allow_html=True)
 
-    st.markdown("<p style='font-family: san-serif; text-align: left; color: black; \
+    st.markdown("<p style='font-family: san-serif; text-align: left; text-align: justify; color: black; \
                         font-weight: 550; font-size: 24px'> 📢 Let's start analyzing! Paste the video link and \
                         get a detailed comment analysis.</p>", unsafe_allow_html=True)
 
