@@ -1,38 +1,46 @@
 import pandas as pd
-import subprocess
+import os
 import spacy
 from collections import Counter
 # from itertools import islice
 import string
 import emoji
 
-# Завантаження моделей у словник
-nlp_models = {
-    "en": spacy.load("en_core_web_sm"),
-    "uk": spacy.load("uk_core_news_sm"),
-    "zh": spacy.load("zh_core_web_sm"),
-    "fr": spacy.load("fr_core_news_sm"),
-    "de": spacy.load("de_core_news_sm"),
-    "it": spacy.load("it_core_news_sm"),
-    "ja": spacy.load("ja_core_news_sm"),
-    "ko": spacy.load("ko_core_news_sm"),
-    "pl": spacy.load("pl_core_news_sm"),
-    "pt": spacy.load("pt_core_news_sm"),
-    "ru": spacy.load("ru_core_news_sm"),
-    "es": spacy.load("es_core_news_sm"),
-    "sv": spacy.load("sv_core_news_sm"),
-    "ro": spacy.load("ro_core_news_sm"),
-    "nl": spacy.load("nl_core_news_sm"),
-    "hr": spacy.load("hr_core_news_sm"),
-    "el": spacy.load("el_core_news_sm"),
-    "sl": spacy.load("sl_core_news_sm"),
-    "nb": spacy.load("nb_core_news_sm"),
-    "mk": spacy.load("mk_core_news_sm"),
-    "lt": spacy.load("lt_core_news_sm"),
-    "fi": spacy.load("fi_core_news_sm"),
-    "da": spacy.load("da_core_news_sm"),
-    "ca": spacy.load("ca_core_news_sm"),
+# Відповідність назв мов до назв моделей
+model_mapping = {
+    "en": "en_core_web_sm",
+    "uk": "uk_core_news_sm",
+    "fr": "fr_core_news_sm",
+    "de": "de_core_news_sm",
+    "it": "it_core_news_sm",
+    "ja": "ja_core_news_sm",
+    "ko": "ko_core_news_sm",
+    "pl": "pl_core_news_sm",
+    "pt": "pt_core_news_sm",
+    "ru": "ru_core_news_sm",
+    "es": "es_core_news_sm",
+    "sv": "sv_core_news_sm",
+    "ro": "ro_core_news_sm",
+    "nl": "nl_core_news_sm",
+    "hr": "hr_core_news_sm",
+    "el": "el_core_news_sm",
+    "sl": "sl_core_news_sm",
+    "nb": "nb_core_news_sm",
+    "mk": "mk_core_news_sm",
+    "lt": "lt_core_news_sm",
+    "fi": "fi_core_news_sm",
+    "da": "da_core_news_sm",
+    "ca": "ca_core_news_sm",
 }
+
+# Завантаження моделей у словник з локальної папки
+nlp_models = {}
+
+for lang, model in model_mapping.items():
+    model_path = os.path.join("models", model)
+    if os.path.exists(model_path):
+        nlp_models[lang] = spacy.load(model_path)
+
 
 def create_df_for_fa(df):
     # Функція лематизації з підтримкою багатьох мов
