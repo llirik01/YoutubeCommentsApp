@@ -4,60 +4,65 @@ from sentiment_analysis import *
 from frequency_analysis import *
 import time
 
+# API key for accessing YouTube data
 api_key = 'AIzaSyA40tswEwzrSr5HrxvescQLz06S9pQXtfo'
 
+# Setting up the Streamlit app configuration
 st.set_page_config(page_title='YouTubeCommentsApp', layout='wide')
 
 st.logo('logo.png', size="large")
 
-# Ініціалізація стану сторінки, якщо ще не задано
+# Initializing session state variables if they are not set
 if "page" not in st.session_state:
-    st.session_state["page"] = "home"  # Початковий екран
+    st.session_state["page"] = "home"  # Default page
 
 if "primary_df" not in st.session_state:
-    st.session_state["primary_df"] = None
+    st.session_state["primary_df"] = None  # Stores raw comments data
 
 if "df_clean_sentiment" not in st.session_state:
-    st.session_state["df_clean_sentiment"] = None
+    st.session_state["df_clean_sentiment"] = None  # Stores cleaned data for sentiment analysis
 
 if "df_sentiment" not in st.session_state:
-    st.session_state["df_sentiment"] = None  # pd.DataFrame()
+    st.session_state["df_sentiment"] = None  # Stores sentiment analysis results
 
-# Функція для перемикання між екранами
+
+# Function to switch between different pages
 def set_page(page_name):
     st.session_state["page"] = page_name
 
 
-# **Сайдбар з кнопками**
+# Sidebar with navigation buttons
 with st.sidebar:
     if st.button("Homepage", use_container_width=True):
         set_page("home")
 
     st.divider()
 
+    # Input field for YouTube video link
     link = st.text_input("", placeholder="Paste your link here", label_visibility="hidden")
     submit_button = st.button("Pass the link", use_container_width=True)
 
     if submit_button and link:
-        # Очищення старих даних перед новим запитом
+        # Clearing previous data before fetching new comments
         st.session_state.primary_df = None
         st.session_state.df_clean_sentiment = None
         st.session_state.df_sentiment = None
 
         with st.spinner("Fetching comments..."):
             time.sleep(3)
-            primary_df = get_comments(api_key=api_key, video_url=link)
+            primary_df = get_comments(api_key=api_key, video_url=link)  # Fetching comments
 
         if primary_df is None:
             st.error("Please insert a link before submitting.", icon='❗️')
         else:
             with st.spinner("Cleaning data for sentiment analysis..."):
                 time.sleep(3)
-                df_clean_sentiment = clean_df_for_sentiment(primary_df)
+                df_clean_sentiment = clean_df_for_sentiment(primary_df)  # Cleaning data
 
             with st.spinner("Performing sentiment analysis..."):
-                df_sentiment = make_sentiment_analysis(df_clean_sentiment)
+                df_sentiment = make_sentiment_analysis(df_clean_sentiment)  # Performing sentiment analysis
 
+            # Storing results in session state
             st.session_state["primary_df"] = primary_df
             st.session_state['df_clean_sentiment'] = df_clean_sentiment
             st.session_state["df_sentiment"] = df_sentiment
@@ -68,6 +73,7 @@ with st.sidebar:
     st.text(' ')
     st.header("App`s functionality", divider=True)
 
+    # Buttons for different functionalities
     if st.button("Top-100 most liked comments", use_container_width=True):
         set_page("function_1")
     if st.button("Top-100 most positive comments", use_container_width=True):
@@ -85,7 +91,7 @@ with st.sidebar:
     st.markdown("<h5 style='text-align: center; color: black; font-weight: normal;'>Created by Kyryl Shum 🧑‍💻</h5>",
                 unsafe_allow_html=True)
 
-# **Головний екран**
+# Main screen logic based on the selected page
 if st.session_state["page"] == "home":
     st.markdown("<h1 style='font-family: san-serif; text-align: center; color: black; \
      font-weight: 650;'>📺 YouTube Comment Analysis</h1>", unsafe_allow_html=True)
@@ -144,64 +150,72 @@ if st.session_state["page"] == "home":
                         get a detailed comment analysis.</p>", unsafe_allow_html=True)
 
 
-
-
-# **Функціональні екрани**
+# Page for displaying top 100 most liked comments
 elif st.session_state["page"] == "function_1":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
              font-weight: 550;'>Top-100 most liked comments</h2>", unsafe_allow_html=True)
 
-    # Перевірка на наявність даних
+    # Check if data is available
     if "df_sentiment" not in st.session_state or st.session_state["df_sentiment"] is None:
         st.warning("No data available. Please provide a link and fetch comments first.", icon='⚠️')
     else:
+        # Get top liked comments and display them in a table
         toplikes_df = top_liked_comments(st.session_state["df_sentiment"])
         st.dataframe(data=toplikes_df, use_container_width=True)
 
+# Page for displaying the top 100 most positive comments
 elif st.session_state["page"] == "function_2":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
                  font-weight: 550;'>Top-100 most positive comments</h2>", unsafe_allow_html=True)
 
     st.info('Only comments with a sentiment score above 0.85 are displayed.', icon='ℹ️')
 
+    # Check if data is available
     if "df_sentiment" not in st.session_state or st.session_state["df_sentiment"] is None:
         st.warning("No data available. Please provide a link and fetch comments first.", icon='⚠️')
     else:
+        # Get top positive comments and display them in a table
         topPos_df = show_positive_comments(st.session_state["df_sentiment"])
         st.dataframe(data=topPos_df, use_container_width=True)
 
+# Page for displaying the top 100 most negative comments
 elif st.session_state["page"] == "function_3":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
                      font-weight: 550;'>Top-100 most negative comments</h2>", unsafe_allow_html=True)
     st.info('Only comments with a sentiment score above 0.85 are displayed.', icon='ℹ️')
 
+    # Check if data is available
     if "df_sentiment" not in st.session_state or st.session_state["df_sentiment"] is None:
         st.warning("No data available. Please provide a link and fetch comments first.", icon='⚠️')
     else:
+        # Get top negative comments and display them in a table
         topNeg_df = show_negative_comments(st.session_state["df_sentiment"])
         st.dataframe(data=topNeg_df, use_container_width=True)
 
+# Page for displaying all comments
 elif st.session_state["page"] == "function_4":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
                          font-weight: 550;'>Show all comments</h2>", unsafe_allow_html=True)
 
+    # Check if data is available
     if "df_sentiment" not in st.session_state or st.session_state["df_sentiment"] is None:
         st.warning("No data available. Please provide a link and fetch comments first.", icon='⚠️')
     else:
+        # Display all comments with selected columns
         st.dataframe(data=st.session_state["df_sentiment"][['author', 'comment', 'date', 'likes']],
                      use_container_width=True)
 
-
+# Page for sentiment distribution visualization
 elif st.session_state["page"] == "function_5":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
                              font-weight: 550;'>Sentiment Distribution Visualization</h2>", unsafe_allow_html=True)
 
     st.write("Select sentiments to display:")
 
-    # Опції для вибору
+    # Available sentiment options
     sentiment_options = ["negative", "neutral", "positive"]
 
-    # Розміщення чекбоксів в один рядок
+    # Display checkboxes for selecting sentiment filters
     cols = st.columns(len(sentiment_options))
     selected_sentiments = []
 
@@ -210,13 +224,13 @@ elif st.session_state["page"] == "function_5":
             if st.checkbox(sentiment, value=True):
                 selected_sentiments.append(sentiment)
 
-    # Перевірка на наявність даних
+    # Check if data is available
     if "df_sentiment" not in st.session_state or st.session_state["df_sentiment"] is None:
         st.error("No data available for visualization. Please provide a link and fetch comments first.", icon='❗️')
     elif not selected_sentiments:
         st.warning("Select at least one sentiment to display.", icon='⚠️')
     else:
-        # Фільтрація даних
+        # Filter data based on selected sentiments
         filtered_df = st.session_state["df_sentiment"][
             st.session_state["df_sentiment"]["dominant_sentiment"].isin(selected_sentiments)
         ]
@@ -224,7 +238,7 @@ elif st.session_state["page"] == "function_5":
         if filtered_df.empty:
             st.warning("No data available for the selected sentiments.", icon='⚠️')
         else:
-            # Спінер для візуалізації побудови графіків
+            # Display sentiment distribution chart
             with st.spinner("Analyzing sentiment distribution..."):
                 time.sleep(2)
                 sentiments_count = count_classes(filtered_df)
@@ -244,25 +258,26 @@ elif st.session_state["page"] == "function_5":
                 comments_length_graph = plot_comments_length_analysis(filtered_df)
                 st.plotly_chart(comments_length_graph, use_container_width=True, theme=None)
 
-
+# Page for frequent words visualization
 elif st.session_state["page"] == "function_6":
     st.markdown("<h2 style='font-family: san-serif; text-align: center; color: #261324; \
                                              font-weight: 550;'>Frequent Words Visualization</h2>",
                 unsafe_allow_html=True)
 
+    # Check if data is available
     if "df_clean_sentiment" not in st.session_state or st.session_state["df_clean_sentiment"] is None:
         st.error("No data available for visualization. Please provide a link and fetch comments first.", icon='❗️')
     else:
         df_fr_an = create_df_for_fa(st.session_state["df_clean_sentiment"])
-        frequent_words = frequent_words(df_fr_an)
+        frequent_words = frequent_words(df_fr_an)  # get frequent words
 
-        # Світчер для вибору графіка
+        # Dropdown to select chart type
         chart_type = st.selectbox(
             "Select chart type:",
             ["Word Cloud", "Noun Frequencies", "Verb Frequencies", "Adjective Frequencies"]
         )
 
-        # Відображення графіка на основі вибору користувача
+        # Display the selected chart type
         if chart_type == "Word Cloud":
             with st.spinner("Generating word cloud..."):
                 time.sleep(3)
